@@ -6,7 +6,7 @@
  * @Created  : 2024/3/30 10:22
  */
 
-namespace DeepSeek\exception;
+namespace OpenAI\exception;
 
 class LlmRequesException extends \Exception
 {

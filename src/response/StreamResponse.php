@@ -6,7 +6,7 @@
  * @Created  : 2025/3/19 17:32
  */
 
-namespace DeepSeek\response;
+namespace OpenAI\response;
 
 use Generator;
 use Psr\Http\Message\StreamInterface;
@@ -45,7 +45,7 @@ class StreamResponse implements \IteratorAggregate
                 $line = $this->readLine($this->response);
             }
 
-            if (! str_starts_with($line, 'data:')) {
+            if (!str_starts_with($line, 'data:')) {
                 continue;
             }
 

@@ -6,7 +6,7 @@
  * @Created  : 2025/4/30 11:33
  */
 
-namespace DeepSeek\library;
+namespace OpenAI\library;
 
 use Psr\Http\Message\ResponseInterface;
 

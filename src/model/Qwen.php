@@ -6,11 +6,11 @@
  * @Created  : 2025/4/23 15:12
  */
 
-namespace DeepSeek\model;
+namespace OpenAI\model;
 
-use DeepSeek\constant\Model;
-use DeepSeek\exception\LlmRequesException;
-use DeepSeek\library\File;
+use OpenAI\constant\Model;
+use OpenAI\exception\LlmRequesException;
+use OpenAI\library\File;
 
 class Qwen extends OpenAI
 {

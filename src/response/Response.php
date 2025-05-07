@@ -6,12 +6,12 @@
  * @Created  : 2025/3/27 10:33
  */
 
-namespace DeepSeek\response;
+namespace OpenAI\response;
 
-use DeepSeek\constant\Result;
-use DeepSeek\exception\LlmRequesException;
-use DeepSeek\library\Helper;
-use DeepSeek\model\ChatMessage;
+use OpenAI\ChatMessage;
+use OpenAI\constant\Result;
+use OpenAI\exception\LlmRequesException;
+use OpenAI\library\Helper;
 
 class Response
 {
@@ -67,7 +67,7 @@ class Response
 
     public function setLlmType(string $model)
     {
-        $this->llmType = \DeepSeek\constant\Model::getLlmByModel($model);
+        $this->llmType = \OpenAI\constant\Model::getLlmByModel($model);
     }
 
     public function getModel(): string

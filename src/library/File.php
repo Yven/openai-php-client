@@ -6,10 +6,10 @@
  * @Created  : 2025/4/27 11:38
  */
 
-namespace DeepSeek\library;
+namespace OpenAI\library;
 
-use DeepSeek\exception\LlmFormatException;
-use DeepSeek\exception\LlmRequesException;
+use OpenAI\exception\LlmFormatException;
+use OpenAI\exception\LlmRequesException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Utils;

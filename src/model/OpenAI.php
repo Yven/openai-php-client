@@ -6,14 +6,15 @@
  * @Created  : 2025/3/19 17:32
  */
 
-namespace DeepSeek\model;
+namespace OpenAI\model;
 
-use DeepSeek\constant\Model;
-use DeepSeek\exception\LlmFormatException;
-use DeepSeek\exception\LlmRequesException;
-use DeepSeek\library\Helper;
-use DeepSeek\response\Response;
-use DeepSeek\response\StreamResponse;
+use OpenAI\ChatMessage;
+use OpenAI\constant\Model;
+use OpenAI\exception\LlmFormatException;
+use OpenAI\exception\LlmRequesException;
+use OpenAI\library\Helper;
+use OpenAI\response\Response;
+use OpenAI\response\StreamResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -118,17 +119,23 @@ abstract class OpenAI
     /**
      * 构造DeepSeek请求参数
      *
-     * @param ChatMessage $msgObj 消息对象
+     * @param string|ChatMessage $message 消息对象
      *
      * @return $this
      * @throws \Exception
      */
-    public function query(ChatMessage $msgObj): self
+    public function query($message): self
     {
-        $this->messages = $msgObj;
+        if ($message instanceof ChatMessage) {
+            $this->messages = $message;
+        } else if (is_string($message)) {
+            $this->messages = (new ChatMessage())->append($message);
+        } else {
+            throw new \Exception("参数类型错误");
+        }
 
         $this->body = [
-            "messages" => $msgObj->toArray(),
+            "messages" => $this->messages->toArray(),
             "stream" => false,
             "response_format" => [
                 "type" => "text"
@@ -167,7 +174,7 @@ abstract class OpenAI
     /**
      * 通用请求
      *
-     * @return array|StreamInterface|string
+     * @return array|StreamInterface
      * @throws LlmFormatException
      * @throws LlmRequesException|\GuzzleHttp\Exception\GuzzleException
      */

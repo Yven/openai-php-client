@@ -6,7 +6,7 @@
  * @Created  : 2025/4/30 14:59
  */
 
-namespace DeepSeek\constant;
+namespace OpenAI\constant;
 
 /**
  * @Description

@@ -6,12 +6,12 @@
  * @Created  : 2025/5/6 17:38
  */
 
-namespace DeepSeek;
+namespace OpenAI;
 
-use DeepSeek\constant\LLM;
-use DeepSeek\model\DeepSeek;
-use DeepSeek\model\OpenAI;
-use DeepSeek\model\Qwen;
+use OpenAI\constant\LLM;
+use OpenAI\model\DeepSeek;
+use OpenAI\model\OpenAI;
+use OpenAI\model\Qwen;
 
 class Client
 {

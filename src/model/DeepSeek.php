@@ -6,7 +6,7 @@
  * @Created  : 2025/3/19 17:32
  */
 
-namespace DeepSeek\model;
+namespace OpenAI\model;
 
 /**
  * @Description
