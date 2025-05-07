@@ -1,0 +1,29 @@
+{
+    "name": "yven/openai-php-client",
+    "description": "OpenAI client is a community-maintained PHP API client that allows you to interact with OpenAI like API, supports php7.4+.",
+    "keywords": ["php", "deepseek", "qwen", "sdk", "api", "client", "natural", "language", "processing"],
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "DeepSeek\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yven",
+            "email": "yvenchang@163.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4.0",
+        "guzzlehttp/guzzle": "^7.9",
+        "guzzlehttp/psr7": "^2.7",
+        "godruoyi/php-snowflake": "^2.2"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.4"
+    },
+    "config": {
+    }
+}
