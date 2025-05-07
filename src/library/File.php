@@ -16,6 +16,16 @@ use GuzzleHttp\Psr7\Utils;
 
 trait File
 {
+    /**
+     * 上传文件
+     *
+     * @param array $fileInfo
+     *
+     * @return array
+     * @throws LlmFormatException
+     * @throws LlmRequesException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function uploadFile(array $fileInfo): array
     {
         if (!file_exists($fileInfo['tmp_name'])) {
@@ -48,6 +58,17 @@ trait File
         return $res;
     }
 
+    /**
+     * 文件操作通用请求
+     *
+     * @param string $method
+     * @param string $path
+     *
+     * @return array
+     * @throws LlmFormatException
+     * @throws LlmRequesException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     private function fileRequest(string $method, string $path): array
     {
         try {
@@ -71,14 +92,44 @@ trait File
         return $res;
     }
 
+    /**
+     * 获取文件信息
+     *
+     * @param string $fileId
+     *
+     * @return array
+     * @throws LlmFormatException
+     * @throws LlmRequesException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getFileInfo(string $fileId): array
     {
         return $this->fileRequest('get', 'files/'.$fileId);
     }
+
+    /**
+     * 获取文件列表
+     *
+     * @return array
+     * @throws LlmFormatException
+     * @throws LlmRequesException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getFileList(): array
     {
         return $this->fileRequest('get', 'files');
     }
+
+    /**
+     * 删除文件
+     *
+     * @param string $fileId
+     *
+     * @return array
+     * @throws LlmFormatException
+     * @throws LlmRequesException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function deleteFile(string $fileId): array
     {
         return $this->fileRequest('delete', 'files/'.$fileId);

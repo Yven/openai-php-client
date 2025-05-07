@@ -58,7 +58,7 @@ class Helper
      */
     public static function httpResponseOutput(ResponseInterface $response)
     {
-        $contentType = $response->getHeader('Content-Type')[0];
+        $contentType = $response->getHeader('Content-Type')[0] ?? '';
 
         if (strpos($contentType, 'json') !== false) {
             // json格式返回
