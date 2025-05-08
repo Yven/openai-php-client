@@ -1,5 +1,6 @@
 {
     "name": "yven/openai-php-client",
+    "version": "1.0.0",
     "description": "OpenAI client is a community-maintained PHP API client that allows you to interact with OpenAI like API, supports php7.4+.",
     "keywords": ["php", "deepseek", "qwen", "sdk", "api", "client", "natural", "language", "processing"],
     "type": "library",
