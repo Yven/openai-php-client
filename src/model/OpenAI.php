@@ -34,6 +34,7 @@ abstract class OpenAI
     protected array $body;
     /** @var string 请求地址 */
     protected string $host;
+    /** @var Client 请求客户端 */
     protected Client $client;
     /** @var string[] 请求消息头 */
     protected array $header;
@@ -45,6 +46,16 @@ abstract class OpenAI
     protected string $defaultModel;
     /** @var array 请求错误信息 */
     protected static array $httpCodeErrorMessage;
+
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    public function getHeader(): array
+    {
+        return $this->header;
+    }
 
     public function __construct(string $apiKeys)
     {
@@ -248,18 +259,8 @@ abstract class OpenAI
         return $this->body;
     }
 
-    protected static function errorMessage(\Exception $e): string
+    public static function errorMessage(\Exception $e): string
     {
         return self::$httpCodeErrorMessage[$e->getCode()] ?? $e->getMessage();
-    }
-
-    /**
-     * 能否处理远程文件
-     *
-     * @return bool
-     */
-    public static function hasFileFunc(): bool
-    {
-        return false;
     }
 }

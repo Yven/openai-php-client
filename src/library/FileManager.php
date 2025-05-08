@@ -8,54 +8,67 @@
 
 namespace OpenAI\library;
 
+use GuzzleHttp\Exception\GuzzleException;
 use OpenAI\exception\LlmFormatException;
 use OpenAI\exception\LlmRequesException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Utils;
+use OpenAI\model\OpenAI;
+use OpenAI\response\File;
+use OpenAI\response\FileCollection;
 
-trait File
+class FileManager
 {
+    private OpenAI $service;
+
+    public function __construct(OpenAI $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * 上传文件
      *
-     * @param array $fileInfo
+     * @param string $path
+     * @param string $name
      *
-     * @return array
+     * @return File
+     * @throws GuzzleException
      * @throws LlmFormatException
      * @throws LlmRequesException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function uploadFile(array $fileInfo): array
+    public function upload(string $path, string $name): File
     {
-        if (!file_exists($fileInfo['tmp_name'])) {
+        if (!file_exists($path)) {
             throw new \Exception("文件不存在");
         }
 
         try {
-            $response = $this->client->post('files', [
+            $response = $this->service->getClient()->post('files', [
                 'multipart' => [
                     [
                         'name' => 'file',
-                        'contents' => Utils::tryFopen($fileInfo['tmp_name'], 'r'),
-                        'filename' => $fileInfo['name'],
+                        'contents' => Utils::tryFopen($path, 'r'),
+                        'filename' => $name,
                     ],
                     [
                         'name'     => 'purpose',
                         'contents' => 'file-extract',
                     ],
                 ],
-                'headers' => $this->header,
+                'headers' => $this->service->getHeader(),
             ]);
 
             $res = Helper::httpResponseOutput($response);
+            if (!is_array($res)) throw new LlmRequesException("请求返回数据格式错误");
         } catch (ClientException|ServerException $e) {
             throw new LlmFormatException($e->getResponse()->getBody()->getContents(), $e->getResponse()->getStatusCode());
         } catch (\Exception $e) {
-            throw new LlmRequesException(self::errorMessage($e), $e->getCode());
+            throw new LlmRequesException($this->service::errorMessage($e), $e->getCode());
         }
 
-        return $res;
+        return File::init($res);
     }
 
     /**
@@ -69,7 +82,7 @@ trait File
      * @throws LlmRequesException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function fileRequest(string $method, string $path): array
+    private function request(string $method, string $path, array $query = []): array
     {
         try {
             $path = ltrim($path, '/');
@@ -77,16 +90,18 @@ trait File
             if (!in_array($method, ['GET', 'DELETE'])) throw new \Exception("请求方法错误");
 
             // debug_log($this->body);
-            $response = $this->client->request($method, $path, [
-                'headers' => $this->header,
+            $response = $this->service->getClient()->request($method, $path, [
+                'headers' => $this->service->getHeader(),
+                'query' => $query,
             ]);
 
             $res = Helper::httpResponseOutput($response);
+            if (!is_array($res)) throw new LlmRequesException("请求返回数据格式错误");
             // debug_log($res);
         } catch (ClientException|ServerException $e) {
             throw new LlmFormatException($e->getResponse()->getBody()->getContents(), $e->getResponse()->getStatusCode());
         } catch (\Exception $e) {
-            throw new LlmRequesException(self::errorMessage($e), $e->getCode());
+            throw new LlmRequesException($this->service::errorMessage($e), $e->getCode());
         }
 
         return $res;
@@ -97,27 +112,34 @@ trait File
      *
      * @param string $fileId
      *
-     * @return array
+     * @return File
+     * @throws GuzzleException
      * @throws LlmFormatException
      * @throws LlmRequesException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getFileInfo(string $fileId): array
+    public function info(string $fileId): File
     {
-        return $this->fileRequest('get', 'files/'.$fileId);
+        $data = $this->request('get', 'files/'.$fileId);
+        return File::init($data);
     }
 
     /**
      * 获取文件列表
      *
-     * @return array
+     * @return FileCollection
+     * @throws GuzzleException
      * @throws LlmFormatException
      * @throws LlmRequesException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getFileList(): array
+    public function list(string $next = null): FileCollection
     {
-        return $this->fileRequest('get', 'files');
+        $data = $this->request('get', 'files', $next ? ['after' => $next] : []);
+        $obj = FileCollection::init($data['data'] ?? []);
+        // 递归获取所有数据
+        if (isset($data['has_more']) && $data['has_more']) {
+            $obj->append($this->list($obj->getLastId()));
+        }
+        return $obj;
     }
 
     /**
@@ -125,13 +147,12 @@ trait File
      *
      * @param string $fileId
      *
-     * @return array
+     * @throws GuzzleException
      * @throws LlmFormatException
      * @throws LlmRequesException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function deleteFile(string $fileId): array
+    public function delete(string $fileId)
     {
-        return $this->fileRequest('delete', 'files/'.$fileId);
+        $this->request('delete', 'files/'.$fileId);
     }
 }

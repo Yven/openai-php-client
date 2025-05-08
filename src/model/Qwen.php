@@ -10,7 +10,6 @@ namespace OpenAI\model;
 
 use OpenAI\constant\Model;
 use OpenAI\exception\LlmRequesException;
-use OpenAI\library\File;
 
 class Qwen extends OpenAI
 {
@@ -26,9 +25,6 @@ class Qwen extends OpenAI
         500 => 'Qwen服务器故障',
         503 => 'Qwen暂时无法提供服务',
     ];
-
-    /** 远程文件操作组件 */
-    use File;
 
     /**
      * 设置 AI 模型
@@ -90,10 +86,5 @@ class Qwen extends OpenAI
         }
 
         return $this;
-    }
-
-    public static function hasFileFunc(): bool
-    {
-        return true;
     }
 }
