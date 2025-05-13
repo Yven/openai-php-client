@@ -9,6 +9,11 @@
             "OpenAI\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Yven",
@@ -22,7 +27,10 @@
         "godruoyi/php-snowflake": "^2.0"
     },
     "require-dev": {
-        "symfony/var-dumper": "^5.4"
+        "symfony/var-dumper": "^5.4",
+        "phpunit/phpunit": "^9.6",
+        "nunomaduro/collision": "^5.11",
+        "mockery/mockery": "^1.6"
     },
     "config": {
     }

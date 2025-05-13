@@ -42,10 +42,21 @@ abstract class OpenAI
     protected ChatMessage $messages;
     /** @var string 请求路径 */
     protected string $path = 'chat/completions';
-    /** @var string 默认使用模型 */
-    protected string $defaultModel;
+    /** @var int 默认使用模型 */
+    protected int $defaultModel;
     /** @var array 请求错误信息 */
     protected static array $httpCodeErrorMessage;
+
+    public function getHost(): string
+    {
+        return $this->host;
+    }
+
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
+        return $this;
+    }
 
     public function getClient(): Client
     {
@@ -61,29 +72,11 @@ abstract class OpenAI
     {
         $this->apiKeys = $apiKeys;
         $this->client = new Client([
-            'base_uri'        => $this->host,
-            'timeout'         => 5*60,
+            'base_uri' => $this->host,
         ]);
         $this->header = [
-            'Accept' => 'application/json',
             'Authorization' => 'Bearer '.$this->apiKeys,
         ];
-    }
-
-    /**
-     * 请求标题（或简略总结）
-     * @return $this
-     * @throws LlmRequesException
-     */
-    public function queryTitle(): OpenAI
-    {
-        array_unshift(
-            $this->body['messages'],
-            ...(new ChatMessage)->appendPrompt("使用20个以内的字符总结下面的问题和答案，遇到无法总结的情况直接返回\"默认标题\"")->toArray(),
-        );
-        $this->withModel($this->defaultModel);
-
-        return $this;
     }
 
     /**
@@ -96,7 +89,7 @@ abstract class OpenAI
      */
     public function withModel(int $model): self
     {
-        if (!Model::isMatch($model, get_class($this))) throw new LlmRequesException("使用了不支持的模型");
+        if (!Model::isMatch(Model::getCode($model), get_class($this))) throw new LlmRequesException("使用了不支持的模型");
         $this->body['model'] = Model::getCode($model);
 
         return $this;
@@ -165,8 +158,8 @@ abstract class OpenAI
         ];
 
         if (!isset($this->body['model'])) {
-            if (!$this->defaultModel) throw new \Exception("AI模型类初始化未完成");
-            $this->body['model'] = $this->defaultModel;
+            if (is_null($this->defaultModel)) throw new \Exception("AI模型类初始化未完成");
+            $this->body['model'] = Model::getCode($this->defaultModel);
         }
 
         return $this;
@@ -191,16 +184,17 @@ abstract class OpenAI
      */
     private function request()
     {
-        if (Model::isMatch($this->body['model'], get_class($this))) throw new LlmRequesException("使用了不支持的模型");
+        if (!Model::isMatch($this->body['model'], get_class($this))) throw new LlmRequesException("使用了不支持的模型");
         try {
-            if (!$this->check()) throw new LlmRequesException("请求参数格式错误");
+            $this->check();
         } catch (LlmRequesException $e) {
             throw $e;
         }
 
         $options = [
             'headers' => $this->header,
-            'body' => $this->body,
+            'json' => $this->body,
+            'timeout' => 5*60,
         ];
 
         // 流模式设置
@@ -236,7 +230,9 @@ abstract class OpenAI
     {
         $res = $this->request();
         if (!is_array($res)) throw new LlmRequesException("请求返回数据格式错误");
-        return Response::from($res, $this->messages);
+        $obj = Response::from($res, $this->messages);
+        $obj->setReqData($this->body);
+        return $obj;
     }
 
     /**
@@ -261,6 +257,6 @@ abstract class OpenAI
 
     public static function errorMessage(\Exception $e): string
     {
-        return self::$httpCodeErrorMessage[$e->getCode()] ?? $e->getMessage();
+        return static::$httpCodeErrorMessage[$e->getCode()] ?? $e->getMessage();
     }
 }

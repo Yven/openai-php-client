@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         verbose="true"
+         beStrictAboutOutputDuringTests="true"
+         convertDeprecationsToExceptions="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         cacheResult="false"
+         printerClass="NunoMaduro\Collision\Adapters\Phpunit\Printer"
+>
+    <testsuites>
+        <!-- 定义测试套件 -->
+        <testsuite name="Main Test Suite">
+            <!-- 指定测试目录（按需修改路径） -->
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- 代码覆盖率配置 -->
+    <coverage processUncoveredFiles="true">
+        <include>
+            <!-- 包含需要统计覆盖率的源码目录 -->
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <!-- 排除不需要统计覆盖率的文件 -->
+            <directory suffix=".php">vendor</directory>
+            <directory suffix="Test.php">tests</directory>
+        </exclude>
+        <report>
+            <!-- 生成 HTML 覆盖率报告 -->
+            <html outputDirectory="coverage"/>
+            <!-- 生成 Clover 格式报告（适用于 CI/CD） -->
+            <clover outputFile="coverage.xml"/>
+        </report>
+    </coverage>
+
+    <!-- PHP 配置 -->
+    <php>
+        <!-- 环境变量设置 -->
+        <env name="APP_ENV" value="testing"/>
+
+        <!-- PHP INI 设置 -->
+        <ini name="memory_limit" value="-1"/>
+        <ini name="error_reporting" value="E_ALL"/>
+
+        <!-- 服务器变量（可选） -->
+        <server name="SOME_SERVER_VAR" value="test-value"/>
+    </php>
+
+    <!-- 日志记录（可选） -->
+    <logging>
+        <junit outputFile="junit.xml"/>
+    </logging>
+
+    <!-- 监听器配置（可选） -->
+    <listeners>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener" />
+    </listeners>
+</phpunit>

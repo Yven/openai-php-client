@@ -9,6 +9,7 @@
 namespace OpenAI\response;
 
 use OpenAI\ChatMessage;
+use OpenAI\constant\Model;
 use OpenAI\constant\Result;
 use OpenAI\exception\LlmRequesException;
 use OpenAI\library\Helper;
@@ -67,7 +68,7 @@ class Response
 
     public function setLlmType(string $model)
     {
-        $this->llmType = \OpenAI\constant\Model::getLlmByModel($model);
+        $this->llmType = \OpenAI\constant\Model::getLlmByModel(Model::getValue($model));
     }
 
     public function getModel(): string
@@ -210,6 +211,10 @@ class Response
 
     public function setUsage(?string $usage)
     {
+        $data = json_decode($usage, true);
+        $this->setInputToken(intval(@$data['prompt_tokens']??0));
+        $this->setOutputToken(intval(@$data['completion_tokens']??0));
+
         $this->usage = $usage;
     }
 
@@ -240,16 +245,16 @@ class Response
         $oldUsage = @json_decode($this->usage, true) ?: [];
         $newUsage = @json_decode($usage, true) ?: [];
 
+        if (!$newUsage) return;
+
         if (!$this->usage) {
-            $this->usage = $usage;
+            $this->setUsage($usage);
             return;
         }
 
         $nowUsage = Helper::arrayItemAdd($oldUsage, $newUsage);
 
-        $this->setInputToken($nowUsage['prompt_tokens']??0);
-        $this->setOutputToken($nowUsage['completion_tokens']??0);
-        $this->usage = json_encode($nowUsage);
+        $this->setUsage(json_encode($nowUsage));
     }
 
     /**
@@ -326,8 +331,6 @@ class Response
         if (isset($data['usage'])) {
             $obj->setUsage(json_encode($data['usage']));
         }
-        $obj->setInputToken(@$data['usage']['prompt_tokens']??0);
-        $obj->setOutputToken(@$data['usage']['completion_tokens']??0);
 
         return $obj;
     }

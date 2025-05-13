@@ -71,20 +71,14 @@ class Model extends Enum
     /**
      * 通过 model 获取 LLM 类型
      *
-     * @param string $code
+     * @param int $value
      *
      * @return int
      */
-    public static function getLlmByModel(string $code): int
+    public static function getLlmByModel(int $value): int
     {
-        try {
-            $modelCode = self::getValue($code);
-        } catch (\Exception $e) {
-            return -1;
-        }
-
         foreach (self::$nameList as $llm => $item) {
-            if (in_array($modelCode, array_keys($item))) {
+            if (in_array($value, array_keys($item))) {
                 return $llm;
             }
         }
@@ -101,7 +95,7 @@ class Model extends Enum
      */
     public static function isStreamForce(string $model): bool
     {
-        return in_array($model, self::$streamModel);
+        return in_array(self::getValue($model), self::$streamModel);
     }
 
     /**
@@ -114,8 +108,9 @@ class Model extends Enum
      */
     public static function isMatch(string $model, string $llmClass): bool
     {
-        if (($llmType = self::getLlmByModel($model)) === -1) return false;
+        if (($llmType = self::getLlmByModel(Model::getValue($model))) === -1) return false;
         try {
+            $llmClass = substr($llmClass, strrpos($llmClass, '\\') + 1);
             if (($llmType2 = LLM::getValue($llmClass)) === -1) return false;
         } catch (\Exception $e) {
             return false;

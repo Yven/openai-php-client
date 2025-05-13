@@ -11,11 +11,16 @@ namespace OpenAI\response;
 class FileCollection implements \IteratorAggregate
 {
     /** @var array[File] $file */
-    private array $files;
+    private array $files = [];
 
     public function getFileList(): array
     {
         return $this->files;
+    }
+
+    public function getCount(): int
+    {
+        return count($this->files);
     }
 
     private function __construct() {}

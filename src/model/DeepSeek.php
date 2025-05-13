@@ -8,6 +8,8 @@
 
 namespace OpenAI\model;
 
+use OpenAI\constant\Model;
+
 /**
  * @Description
  * DeepSeek请求类
@@ -18,7 +20,7 @@ namespace OpenAI\model;
 class DeepSeek extends OpenAI
 {
     protected string $host = 'https://api.deepseek.com/';
-    protected string $defaultModel = 'deepseek-chat';
+    protected int $defaultModel = Model::DEEPSEEK_CHAT;//'deepseek-chat';
     protected static array $httpCodeErrorMessage = [
         400 => '请求格式错误',
         401 => '认证失败',

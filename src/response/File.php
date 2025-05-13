@@ -63,7 +63,7 @@ class File
 
     public static function init(array $data): self
     {
-        if (!isset($data['id']) || !isset($data['bytes']) || !isset($data['created_at']) || !isset($data['filename']) || !isset($data['object']) || !isset($data['purpose']) || !isset($data['status']) || !isset($data['status_details'])) throw new \Exception("缺少参数");
+        if (!isset($data['id']) || !isset($data['bytes']) || !isset($data['created_at']) || !isset($data['filename']) || !isset($data['object']) || !isset($data['purpose']) || !isset($data['status'])) throw new \Exception("缺少参数");
 
         $obj = new File;
         $obj->fileId = $data['id'];
@@ -73,7 +73,7 @@ class File
         $obj->object = $data['object'];
         $obj->purpose = $data['purpose'];
         $obj->status = $data['status'];
-        $obj->statusDetails = $data['status_details'];
+        $obj->statusDetails = $data['status_details'] ?? null;
 
         return $obj;
     }

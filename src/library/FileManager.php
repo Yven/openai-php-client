@@ -117,9 +117,14 @@ class FileManager
      * @throws LlmFormatException
      * @throws LlmRequesException
      */
-    public function info(string $fileId): File
+    public function info(string $fileId): ?File
     {
-        $data = $this->request('get', 'files/'.$fileId);
+        try {
+            $data = $this->request('get', 'files/'.$fileId);
+        } catch (LlmFormatException $e) {
+            if ($e->getErrCode() === 'invalid_request_error') return null;
+            throw $e;
+        }
         return File::init($data);
     }
 
@@ -147,12 +152,13 @@ class FileManager
      *
      * @param string $fileId
      *
+     * @return bool
      * @throws GuzzleException
      * @throws LlmFormatException
      * @throws LlmRequesException
      */
-    public function delete(string $fileId)
+    public function delete(string $fileId): bool
     {
-        $this->request('delete', 'files/'.$fileId);
+        return $this->request('delete', 'files/'.$fileId)['deleted'] ?? false;
     }
 }

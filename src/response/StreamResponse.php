@@ -39,11 +39,11 @@ class StreamResponse implements \IteratorAggregate
                 yield Response::fromKeepAlive();
             }
 
-            $event = null;
-            if (str_starts_with($line, 'event:')) {
-                $event = trim(substr($line, strlen('event:')));
-                $line = $this->readLine($this->response);
-            }
+            // $event = null;
+            // if (str_starts_with($line, 'event:')) {
+            //     $event = trim(substr($line, strlen('event:')));
+            //     $line = $this->readLine($this->response);
+            // }
 
             if (!str_starts_with($line, 'data:')) {
                 continue;
@@ -56,11 +56,6 @@ class StreamResponse implements \IteratorAggregate
             }
 
             $response = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
-
-            if ($event !== null) {
-                $response['__event'] = $event;
-                // $response['__meta'] = $this->meta();
-            }
 
             yield Response::from($response);
         }

@@ -14,7 +14,7 @@ use OpenAI\exception\LlmRequesException;
 class Qwen extends OpenAI
 {
     protected string $host = 'https://dashscope.aliyuncs.com/compatible-mode/v1/';
-    protected string $defaultModel = 'qwen-plus';
+    protected int $defaultModel = Model::QWEN_PLUS;
     protected static array $httpCodeErrorMessage = [
         401 => '请求中的 API Key 错误。请重新获取API Key。',
         402 => '无权访问此 API，请前往百炼控制台查看具体问题。',
@@ -36,14 +36,14 @@ class Qwen extends OpenAI
      */
     public function withModel(int $model): self
     {
+        parent::withModel($model);
+
         if ($model === Model::QWEN_3) {
             // Qwen3 启用推理模式
             $this->body['enable_thinking'] = true;
         } else {
             unset($this->body['enable_thinking']);
         }
-
-        $this->body['model'] = Model::getCode($model);
 
         return $this;
     }

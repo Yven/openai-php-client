@@ -68,21 +68,10 @@ abstract class Enum
         } else {
             if (!$returnAll) return [];
 
-            if (
-                !empty(
-                    array_filter(
-                        static::$nameList,
-                        function ($item) { return !is_array($item); }
-                    )
-                )
-            ) {
-                throw new \Exception('nameList格式错误');
-            }
-
             if (is_array(current(static::$nameList))) {
                 $res = [];
                 foreach (static::$nameList as $item) {
-                    $res = array_merge($res, array_keys($item));
+                    $res = array_merge($res, $item);
                 }
 
                 return $res;
@@ -94,8 +83,9 @@ abstract class Enum
 
     public static function getName($value)
     {
-        if (isset(static::$nameList[$value])) {
-            return static::$nameList[$value];
+        $nameList = self::getNameList();
+        if (isset($nameList[$value])) {
+            return $nameList[$value];
         } else {
             throw new \Exception("枚举名称(".$value.")不存在");
         }

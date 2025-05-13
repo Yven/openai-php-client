@@ -218,7 +218,12 @@ class ChatMessage
      */
     public function getLastQuestion(): ?string
     {
-        $lastQuestion = current($this->messages[$this->getLastSeq()][$this->getLastIndex()][0]);
+        try {
+            $lastQuestion = current($this->messages[$this->getLastSeq()][$this->getLastIndex()][0]);
+        } catch (\Exception $e) {
+            return null;
+        }
+
         if (is_array($lastQuestion)) {
             foreach ($lastQuestion as $item) {
                 if ($item['type'] === 'text') {
@@ -228,8 +233,6 @@ class ChatMessage
         } else {
             return $lastQuestion;
         }
-
-        return null;
     }
 
     public function getFile(): array

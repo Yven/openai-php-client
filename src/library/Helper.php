@@ -25,10 +25,10 @@ class Helper
         foreach ($newArr as $key => $item) {
             if (is_array($newArr[$key])) {
                 foreach ($item as $k => $v) {
-                    $newArr[$key][$k] = $v + @$oldArr[$key][$k]??0;
+                    $newArr[$key][$k] = intval($v) + intval(@$oldArr[$key][$k]??0);
                 }
             } else {
-                $newArr[$key] = $item + @$oldArr[$key]??0;
+                $newArr[$key] = intval($item) + intval(@$oldArr[$key]??0);
             }
         }
 

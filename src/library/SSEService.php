@@ -56,14 +56,14 @@ class SSEService
      *
      * @return void
      */
-    public static function echo(string $event, ?string $data = null)
+    public static function echo(string $event, string $data = null)
     {
         // 转义换行符，直接输出会导致格式错误
         $event = str_replace("\n", '\\n', $event);
-        $data = str_replace("\n", '\\n', $data);
         if (is_null($data)) {
             echo "data: ".$event."\n\n";
         } else {
+            $data = str_replace("\n", '\\n', $data);
             echo "event: ".$event."\ndata: ".$data."\n\n";
         }
 
