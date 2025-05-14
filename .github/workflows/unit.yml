@@ -35,7 +35,7 @@ jobs:
         run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
 
       - name: Test and Coverage
-        run: composer test:unit
+        run: cp phpunit.xml.dist phpunit.xml && composer test:unit
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
