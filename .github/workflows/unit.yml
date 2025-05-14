@@ -41,4 +41,4 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           format: clover
-          file: ./coverage.xml
+          file: ${{ github.workspace }}/coverage.xml
