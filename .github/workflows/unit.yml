@@ -40,7 +40,6 @@ jobs:
           mkdir -p coverage
           cp phpunit.xml.dist phpunit.xml
           composer test:unit
-#          ./vendor/bin/phpunit --coverage-clover=coverage.xml
           echo "项目文件列表："
           ls -R .
 
@@ -48,6 +47,8 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           format: clover
+
+#          ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
 #      - name: Test and Coverage
 #        run: cp phpunit.xml.dist phpunit.xml && composer test:unit
