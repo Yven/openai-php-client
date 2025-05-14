@@ -39,6 +39,7 @@ jobs:
           pwd
           cp phpunit.xml.dist phpunit.xml
           composer test:unit
+          ./vendor/bin/phpunit --configuration=phpunit.xml
           echo "项目文件列表："
           ls .
 
