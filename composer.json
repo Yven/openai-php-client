@@ -35,6 +35,6 @@
     "config": {
     },
     "scripts": {
-        "test:unit": "./vendor/bin/phpunit --configuration=phpunit.xml --coverage-clover=coverage.xml"
+        "test:unit": "./vendor/bin/phpunit --configuration=phpunit.xml"
     }
 }

@@ -34,7 +34,7 @@
             <!-- 生成 HTML 覆盖率报告 -->
             <html outputDirectory="coverage"/>
             <!-- 生成 Clover 格式报告（适用于 CI/CD） -->
-            <clover outputFile="coverage.xml"/>
+            <clover outputFile="coverage/coverage.xml"/>
         </report>
     </coverage>
 
