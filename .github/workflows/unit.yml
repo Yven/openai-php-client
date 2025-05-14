@@ -41,7 +41,7 @@ jobs:
           cp phpunit.xml.dist phpunit.xml
           composer test:unit
           echo "项目文件列表："
-          ls -R .
+          ls -alh .
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
