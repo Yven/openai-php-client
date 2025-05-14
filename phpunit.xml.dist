@@ -15,7 +15,7 @@
         <!-- 定义测试套件 -->
         <testsuite name="Main Test Suite">
             <!-- 指定测试目录（按需修改路径） -->
-            <directory>tests</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
 

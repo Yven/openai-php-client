@@ -28,7 +28,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, xdebug
+          extensions: dom, json, mbstring, xdebug
           coverage: none
 
       - name: Install Composer dependencies
@@ -40,4 +40,4 @@ jobs:
       - name: Coveralls
         uses: coverallsapp/github-action@v2
         with:
-          file: ./coverage.xml
+          format: clover
