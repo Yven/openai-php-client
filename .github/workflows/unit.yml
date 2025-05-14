@@ -41,12 +41,13 @@ jobs:
           cp phpunit.xml.dist phpunit.xml
           composer test:unit
           echo "项目文件列表："
-          ls -alh .
+          ls .
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
         with:
           format: clover
+          file: coverage
 
 #          ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
