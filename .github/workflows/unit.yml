@@ -35,10 +35,25 @@ jobs:
         run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
 
       - name: Test and Coverage
-        run: cp phpunit.xml.dist phpunit.xml && composer test:unit
+        run: |
+          pwd
+          mkdir -p coverage
+          cp phpunit.xml.dist phpunit.xml
+          composer test:unit
+#          ./vendor/bin/phpunit --coverage-clover=coverage.xml
+          echo "项目文件列表："
+          ls -R .
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
         with:
           format: clover
-          file: ${{ github.workspace }}/coverage.xml
+
+#      - name: Test and Coverage
+#        run: cp phpunit.xml.dist phpunit.xml && composer test:unit
+#
+#      - name: Coveralls
+#        uses: coverallsapp/github-action@v2
+#        with:
+#          format: clover
+#          file: ${{ github.workspace }}/coverage.xml

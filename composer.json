@@ -35,6 +35,6 @@
     "config": {
     },
     "scripts": {
-        "test:unit": "php ./vendor/bin/phpunit --configuration ./phpunit.xml"
+        "test:unit": "php ./vendor/bin/phpunit --configuration=phpunit.xml"
     }
 }
