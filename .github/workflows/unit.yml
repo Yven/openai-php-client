@@ -28,7 +28,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, mbstring, zip
+          extensions: dom, mbstring, zip, xdebug
           coverage: pcov
 
       - name: Install Composer dependencies
