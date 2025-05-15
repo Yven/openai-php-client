@@ -37,11 +37,12 @@ jobs:
 
       - name: Test and Coverage
         run: |
-          ./vendor/bin/phpunit --coverage-clover clover.xml
-          echo "项目文件列表："
-          ls .
+          cp phpunit.xml.dist phpunit.xml
+          composer test:unit
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2
         with:
           format: clover
+
+# ./vendor/bin/phpunit --coverage-clover clover.xml
