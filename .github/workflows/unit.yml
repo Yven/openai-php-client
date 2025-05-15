@@ -11,7 +11,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: [7.4]
-        dependency-version: [prefer-stable]
+        dependency-version: [prefer-dist]
 
     name: Test PHP${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
@@ -30,14 +30,14 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, json, mbstring
           coverage: xdebug, pcov
+          tools: composer:v2
 
       - name: Install Composer dependencies
-        run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
+        run: composer update --${{ matrix.dependency-version }} --no-interaction
 
       - name: Test and Coverage
         run: |
-          cp phpunit.xml.dist phpunit.xml
-          composer test:unit
+          ./vendor/bin/phpunit --coverage-clover clover.xml
           echo "项目文件列表："
           ls .
 
@@ -45,14 +45,3 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           format: clover
-
-#          ./vendor/bin/phpunit --configuration=phpunit.xml
-
-#      - name: Test and Coverage
-#        run: cp phpunit.xml.dist phpunit.xml && composer test:unit
-#
-#      - name: Coveralls
-#        uses: coverallsapp/github-action@v2
-#        with:
-#          format: clover
-#          file: ${{ github.workspace }}/coverage.xml
