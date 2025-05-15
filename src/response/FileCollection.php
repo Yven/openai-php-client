@@ -52,4 +52,11 @@ class FileCollection implements \IteratorAggregate
     {
         return $this->files[count($this->files) - 1]->getId();
     }
+
+    public function toArray(): array
+    {
+        return array_map(function (File $file) {
+            return $file->toArray();
+        }, $this->files);
+    }
 }

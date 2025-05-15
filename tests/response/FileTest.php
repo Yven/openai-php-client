@@ -27,4 +27,13 @@ class FileTest extends TestCase
         $this->assertEquals($fileInfo['status'], $file->getStatus());
         $this->assertEquals($fileInfo['status_details'], $file->getStatusDetails());
     }
+
+    public function testToArray()
+    {
+        $fileInfo = json_decode('{"id": "file-fe-xxx", "bytes": 2055, "created_at": 1729065448, "filename": "FileManagerTest.php", "object": "file", "purpose": "file-extract", "status": "processed", "status_details": null}', true);
+        $file = File::init($fileInfo);
+
+        $fileArr = $file->toArray();
+        $this->assertEquals($fileInfo['id'], $fileArr['id']);
+    }
 }

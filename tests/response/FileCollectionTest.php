@@ -22,4 +22,14 @@ class FileCollectionTest extends TestCase
             $this->assertEquals($fileInfo['id'], $file->getId());
         }
     }
+
+    public function testToArray()
+    {
+        $fileInfo = json_decode('{"id": "file-fe-xxx", "bytes": 2055, "created_at": 1729065448, "filename": "FileManagerTest.php", "object": "file", "purpose": "file-extract", "status": "processed", "status_details": null}', true);
+        $files = FileCollection::init([$fileInfo, $fileInfo]);
+
+        $fileList = $files->toArray();
+        $this->assertIsArray($fileList[0]);
+        $this->assertEquals($fileInfo['id'], $fileList[0]['id']);
+    }
 }

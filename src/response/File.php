@@ -77,4 +77,18 @@ class File
 
         return $obj;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->fileId,
+            'bytes' => $this->bytes,
+            'created_at' => $this->createdAt,
+            'filename' => $this->filename,
+            'object' => $this->object,
+            'purpose' => $this->purpose,
+            'status' => $this->status,
+            'status_details' => $this->statusDetails,
+        ];
+    }
 }
