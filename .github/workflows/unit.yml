@@ -1,0 +1,48 @@
+name: test-unit
+
+on: ['push', 'pull_request']
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+        php: [7.4]
+        dependency-version: [prefer-dist]
+
+    name: Test PHP${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, json, mbstring
+          coverage: xdebug, pcov
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer update --${{ matrix.dependency-version }} --no-interaction
+
+      - name: Test and Coverage
+        run: |
+          cp phpunit.xml.dist phpunit.xml
+          composer test:unit
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          format: clover
+
+# ./vendor/bin/phpunit --coverage-clover clover.xml

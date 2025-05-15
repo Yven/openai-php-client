@@ -1,6 +1,15 @@
-# openai-php-client
+#openai-php-client
 
 openai-php-client is a community-maintained PHP API client that allows you to interact with OpenAI like API, supports php7.4+.
+
+<p align="center">
+<a href='https://coveralls.io/github/Yven/openai-php-client?branch=feature/cicd'><img src='https://coveralls.io/repos/github/Yven/openai-php-client/badge.svg?branch=feature/cicd' alt='Coverage Status' /></a>
+<img alt="GitHub Workflow Status (main)" src="https://img.shields.io/github/actions/workflow/status/yven/openai-php-client/unit.yml?branch=main&label=tests&style=round-square">
+<a href="https://packagist.org/packages/openai-php/client"><img alt="Latest Version" src="https://img.shields.io/packagist/v/yven/openai-php-client"></a>
+<a href="https://packagist.org/packages/openai-php/client"><img alt="License" src="https://img.shields.io/github/license/yven/openai-php-client"></a>
+</p>
+
+---
 
 ### Install
 ```shell
